@@ -1,0 +1,29 @@
+.sidebar{
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  z-index: 5;
+  display: block;
+  padding: 20px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-right: 1px solid #eee;
+  background:white;
+}
+.main{
+  top: 0px;
+  bottom: 0px;
+  padding: 20px;
+  display: block;
+  z-index: 4;
+  
+}
+.inside-sidebar{
+  padding:5px;
+  box-shadow: 5px 5px 5px black;
+}
+.inside-main{
+  padding:5px;
+  box-shadow: 5px 5px 5px black;
+}
