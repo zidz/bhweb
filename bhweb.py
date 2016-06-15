@@ -1,26 +1,38 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2.7
 
-import sys, argparse, json, os
+import sys, argparse, json, os, urllib, ConfigParser
 from flask import Flask, render_template, url_for, send_from_directory
 
 parser = argparse.ArgumentParser(description='This is a genuine frontend for bithorded deamon.')
-parser.add_argument('--future', action="store_true", default=False, help='The future may show if you are patient.')
+parser.add_argument('--bithorded-config', type=str, default='/etc/bithorde.conf', help='Read bithorded configuration file (default: /etc/bithorde.conf)')
 
 args = parser.parse_args()
 
-class base():
-  def __init__(self):
-    test = 0
 
 web = Flask(__name__, static_url_path='')
 web.jinja_env.trim_blocks = True
 web.jinja_env.lstrip_blocks = True
 
+class base():
+  def __init__(self):
+    self.test = 0
+    self.Config = ConfigParser.ConfigParser()
+
+  def readconfig(self):
+    self.Config.read(args.bithorded_config)
+    self.configsections = self.Config.sections()
+    self.configdata = {}
+    for section in self.configsections:
+      self.configdata[section] = {}      
+      for option in self.Config.options(section):
+        self.configdata[section][option] = self.Config.get(section, option)
+
 @web.route('/', methods=['GET'])
 def status():
   title = 'Status'
   bhweb = base()
-  return render_template('status.html', title=title)
+  bhweb.readconfig()
+  return render_template('status.html', title=title, bhweb=bhweb)
 
 @web.route('/css/<path:path>')
 def send_css(path):

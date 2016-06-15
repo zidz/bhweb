@@ -1,4 +1,48 @@
 {% extends "base.html" %}
   {% block content %}
-    <p>This will be the content</p>
+    <h3>Server configuration</h3>
+    <table class="table">
+      <tr>
+        <th>
+          Option 
+        </th>
+        <th>
+          Value
+        </th>
+      </tr>
+      {% for column in bhweb.configdata['server'] %}
+      <tr>
+        <td>
+          {{column}}
+        </td>
+        <td>
+          {{bhweb.configdata['server'][column]}}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    <h3>Friend configuration (Key and cipher hidden)</h3>
+    <table class="table">
+      <tr>
+        <th>
+          Name
+        </th>
+        <th>
+          Address
+        </th>
+      </tr>
+      {% for section in bhweb.configdata %}
+      <tr>
+        {% if 'friend' in section %}
+          {% set friendname = section.split('.')[1] %}
+        <td>
+          {{ friendname }}
+        </td>
+        <td>
+          {{ bhweb.configdata[section]['addr'] }}
+        </td>
+      </tr>
+        {% endif %}
+      {% endfor %}
+    </table>
   {% endblock %}
