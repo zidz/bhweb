@@ -21,28 +21,7 @@
       </tr>
       {% endfor %}
     </table>
-    <h3>Online routes</h3>
-    <table class="table">
-      <tr>
-        <th style="width: 50%;">
-          Node
-        </th>
-        <th style="width: 50%;">
-          Status
-        </th>
-      </tr>
-      {% for column in bhweb.insprouter %}
-      <tr>
-        <td>
-          {{column}}
-        </td>
-        <td>
-          {{bhweb.insprouter[column]}}
-        </td>
-      </tr>
-      {% endfor %}
-    </table>
-    <h3>All connections</h3>
+    <h3>All connected nodes</h3>
     <table class="table">
       <tr>
         <th style="width: 50%;">
@@ -59,6 +38,27 @@
         </td>
         <td>
           {{bhweb.inspconnections[column]}}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    <h3>All configured routes</h3>
+    <table class="table">
+      <tr>
+        <th style="width: 50%;">
+          Node
+        </th>
+        <th style="width: 50%;">
+          Status
+        </th>
+      </tr>
+      {% for column in bhweb.insprouter %}
+      <tr>
+        <td>
+          {{column}}
+        </td>
+        <td>
+          {{bhweb.insprouter[column]}}
         </td>
       </tr>
       {% endfor %}
