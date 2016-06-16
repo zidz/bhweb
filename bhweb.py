@@ -16,6 +16,7 @@ class base():
   def __init__(self):
     self.test = 0
     self.Config = ConfigParser.ConfigParser()
+    self.version = '0.1'
 
   def readconfig(self):
     try:
