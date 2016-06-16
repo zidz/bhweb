@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.7
 
-import sys, argparse, json, os, urllib2, ConfigParser, simplejson
+import sys, argparse, json, os, urllib2, ConfigParser
 from flask import Flask, render_template, url_for, send_from_directory
 
 parser = argparse.ArgumentParser(description='This is a genuine frontend for bithorded deamon.')
