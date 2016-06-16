@@ -5,6 +5,8 @@ from flask import Flask, render_template, url_for, send_from_directory
 
 parser = argparse.ArgumentParser(description='This is a genuine frontend for bithorded deamon.')
 parser.add_argument('--bithorded-config', type=str, default='/etc/bithorde.conf', help='Read bithorded configuration file (default: /etc/bithorde.conf)')
+parser.add_argument('--port', type=str, default=1447, help='Bind to port (default: 1447)')
+parser.add_argument('--interface-ip', type=str, default='0.0.0.0', help='Bind to ip (default: all interfaces)')
 
 args = parser.parse_args()
 
@@ -22,7 +24,7 @@ class base():
     try:
       self.Config.read(args.bithorded_config)
     except:
-      print('Config file '+args.bithorded_config+' does not exist or isnt readable.')
+      print('Config file '+args.bithorded_config+' does not exist or is not readable.')
       sys.exit(1)
     self.configsections = self.Config.sections()
     self.configdata = {}
@@ -81,4 +83,4 @@ def send_img(path):
 
 if __name__ == "__main__":
     web.debug = True
-    web.run(host='0.0.0.0', port=1447)
+    web.run(host=args.interface_ip, port=int(args.port))
