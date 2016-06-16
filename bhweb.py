@@ -1,13 +1,12 @@
 #!/usr/bin/env python2.7
 
-import sys, argparse, json, os, urllib, ConfigParser
+import sys, argparse, json, os, urllib2, ConfigParser, simplejson
 from flask import Flask, render_template, url_for, send_from_directory
 
 parser = argparse.ArgumentParser(description='This is a genuine frontend for bithorded deamon.')
 parser.add_argument('--bithorded-config', type=str, default='/etc/bithorde.conf', help='Read bithorded configuration file (default: /etc/bithorde.conf)')
 
 args = parser.parse_args()
-
 
 web = Flask(__name__, static_url_path='')
 web.jinja_env.trim_blocks = True
@@ -19,7 +18,11 @@ class base():
     self.Config = ConfigParser.ConfigParser()
 
   def readconfig(self):
-    self.Config.read(args.bithorded_config)
+    try:
+      self.Config.read(args.bithorded_config)
+    except:
+      print('Config file '+args.bithorded_config+' does not exist or isnt readable.')
+      sys.exit(1)
     self.configsections = self.Config.sections()
     self.configdata = {}
     for section in self.configsections:
@@ -27,12 +30,36 @@ class base():
       for option in self.Config.options(section):
         self.configdata[section][option] = self.Config.get(section, option)
 
+  def readinspect(self):
+    self.readconfig()
+    self.configdata['server']['inspectport']
+    reqroot = urllib2.Request('http://localhost:'+self.configdata['server']['inspectport'], headers={"Accept" : "application/json"})
+    reqrouter = urllib2.Request('http://localhost:'+self.configdata['server']['inspectport']+'/router', headers={"Accept" : "application/json"})
+    reqconnections = urllib2.Request('http://localhost:'+self.configdata['server']['inspectport']+'/connections', headers={"Accept" : "application/json"})
+    self.insproot = json.load(urllib2.urlopen(reqroot))
+    self.insprouter = json.load(urllib2.urlopen(reqrouter))
+    self.inspconnections = json.load(urllib2.urlopen(reqconnections))
+
 @web.route('/', methods=['GET'])
 def status():
   title = 'Status'
   bhweb = base()
-  bhweb.readconfig()
+  bhweb.readinspect()
   return render_template('status.html', title=title, bhweb=bhweb)
+
+@web.route('/settings', methods=['GET'])
+def settings():
+  title = 'Settings'
+  bhweb = base()
+  bhweb.readconfig()
+  return render_template('settings.html', title=title, bhweb=bhweb)
+
+@web.route('/friends', methods=['GET'])
+def friends():
+  title = 'Friends'
+  bhweb = base()
+  bhweb.readconfig()
+  return render_template('friends.html', title=title, bhweb=bhweb)
 
 @web.route('/css/<path:path>')
 def send_css(path):

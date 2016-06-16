@@ -1,48 +1,66 @@
 {% extends "base.html" %}
   {% block content %}
-    <h3>Server configuration</h3>
+    <h3>Condensed status</h3>
     <table class="table">
       <tr>
-        <th>
-          Option 
+        <th style="width: 50%;">
+          Type 
         </th>
-        <th>
-          Value
+        <th style="width: 50%;">
+          Status
         </th>
       </tr>
-      {% for column in bhweb.configdata['server'] %}
+      {% for column in bhweb.insproot %}
       <tr>
         <td>
           {{column}}
         </td>
         <td>
-          {{bhweb.configdata['server'][column]}}
+          {{bhweb.insproot[column]}}
         </td>
       </tr>
       {% endfor %}
     </table>
-    <h3>Friend configuration (Key and cipher hidden)</h3>
+    <h3>Online routes</h3>
     <table class="table">
       <tr>
-        <th>
-          Name
+        <th style="width: 50%;">
+          Node
         </th>
-        <th>
-          Address
+        <th style="width: 50%;">
+          Status
         </th>
       </tr>
-      {% for section in bhweb.configdata %}
+      {% for column in bhweb.insprouter %}
       <tr>
-        {% if 'friend' in section %}
-          {% set friendname = section.split('.')[1] %}
         <td>
-          {{ friendname }}
+          {{column}}
         </td>
         <td>
-          {{ bhweb.configdata[section]['addr'] }}
+          {{bhweb.insprouter[column]}}
         </td>
       </tr>
-        {% endif %}
+      {% endfor %}
+    </table>
+    <h3>All connections</h3>
+    <table class="table">
+      <tr>
+        <th style="width: 50%;">
+          Node
+        </th>
+        <th style="width: 50%;">
+          Status
+        </th>
+      </tr>
+      {% for column in bhweb.inspconnections %}
+      <tr>
+        <td>
+          {{column}}
+        </td>
+        <td>
+          {{bhweb.inspconnections[column]}}
+        </td>
+      </tr>
       {% endfor %}
     </table>
   {% endblock %}

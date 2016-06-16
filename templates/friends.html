@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+  {% block content %}
+    <h3>Friend configuration (Key and cipher hidden)</h3>
+    <table class="table">
+      <tr>
+        <th style="width: 50%;">
+          Name
+        </th>
+        <th style="width: 50%;">
+          Address
+        </th>
+      </tr>
+      {% for section in bhweb.configdata %}
+        {% if 'friend' in section %}
+      <tr>
+          {% set friendname = section.split('.')[1] %}
+        <td>
+          {{ friendname }}
+        </td>
+        <td>
+          {{ bhweb.configdata[section]['addr'] }}
+        </td>
+      </tr>
+        {% endif %}
+      {% endfor %}
+    </table>
+  {% endblock %}
