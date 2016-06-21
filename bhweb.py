@@ -35,13 +35,17 @@ class base():
 
   def readinspect(self):
     self.readconfig()
-    self.configdata['server']['inspectport']
     reqroot = urllib2.Request('http://localhost:'+self.configdata['server']['inspectport'], headers={"Accept" : "application/json"})
     reqrouter = urllib2.Request('http://localhost:'+self.configdata['server']['inspectport']+'/router', headers={"Accept" : "application/json"})
     reqconnections = urllib2.Request('http://localhost:'+self.configdata['server']['inspectport']+'/connections', headers={"Accept" : "application/json"})
-    self.insproot = json.load(urllib2.urlopen(reqroot))
-    self.insprouter = json.load(urllib2.urlopen(reqrouter))
-    self.inspconnections = json.load(urllib2.urlopen(reqconnections))
+    try:
+      self.insproot = json.load(urllib2.urlopen(reqroot))
+      self.insprouter = json.load(urllib2.urlopen(reqrouter))
+      self.inspconnections = json.load(urllib2.urlopen(reqconnections))
+    except ValueError:
+      self.insproot = {'Incompatible Bithorded':'Please upgrade'}
+      self.insprouter = {'Incompatible Bithorded':'Please upgrade'}
+      self.inspconnections = {'Incompatible Bithorded':'Please upgrade'}
 
 @web.route('/', methods=['GET'])
 def status():
