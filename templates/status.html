@@ -12,19 +12,19 @@
       </tr>
       {% for column in bhweb.insproot %}
         {% if column == 'cache' %}
-          {% set percol = bhweb.insproot[column].split(',')[1] %}
-          {% set percent = percol.split('(')[1].split(')')[0].split('%')[0] %}
+          {% set percent = bhweb.insproot[column].split(',')[1].split('(')[1].split(')')[0] %}
           <tr>
             <td>
               {{column}}
             </td>
             <td>
-              <div class="progress">
-                <div class="progress-bar" role="progressbar" aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">
-                  {{percent}}%
+              Used capacity:
+              <div class="progress" style="width:200px">
+                <div class="progress-bar" role="progressbar" aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;width:{{percent}}">
+                  {{percent}}
                 </div>
               </div>
-              {{bhweb.insproot[column]}}
+              {# {{bhweb.insproot[column]}} #}
             </td>
           </tr>
         {% else %}
@@ -50,12 +50,37 @@
         </th>
       </tr>
       {% for column in bhweb.inspconnections %}
+        {% set incon = bhweb.inspconnections[column].split(',')[0].split('+')[1].split('-')[1] %}
+        {% set outcon = bhweb.inspconnections[column].split(',')[0].split('+')[1].split('-')[0] %}
+        {% set datain = bhweb.inspconnections[column].split(',')[1].split(':')[1] %}
+          {% if 'mbit/s' in datain %}
+            {% set datainusage = 'High' %}
+          {% elif 'kbit/s' in datain %}
+            {% set datainusage = 'Low' %}
+          {% elif ' 0bit/s' == datain %}
+            {% set datainusage = 'Radio silence' %}
+          {% elif 'bit/s' in datain %}
+            {% set datainusage = 'Gossiping' %}
+          {% endif %}
+        {% set dataout = bhweb.inspconnections[column].split(',')[2].split(':')[1] %}
+          {% if 'mbit/s' in dataout %}
+            {% set dataoutusage = 'High' %}
+          {% elif 'kbit/s' in dataout %}
+            {% set dataoutusage = 'Low' %}
+          {% elif ' 0bit/s' == dataout %}
+            {% set dataoutusage = 'Radio silence' %}
+          {% elif 'bit/s' in dataout %}
+            {% set dataoutusage = 'Gossiping' %}
+          {% endif %}
       <tr>
         <td>
           {{column}}
         </td>
         <td>
-          {{bhweb.inspconnections[column]}}
+          Incomming connections: {{incon}}<br>
+          Outgoing connections: {{outcon}}<br>
+          Data in: {{datainusage}} ({{datain}} ) <br>
+          Data out: {{dataoutusage}} ({{dataout}} )
         </td>
       </tr>
       {% endfor %}
