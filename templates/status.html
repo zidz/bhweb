@@ -11,14 +11,32 @@
         </th>
       </tr>
       {% for column in bhweb.insproot %}
-      <tr>
-        <td>
-          {{column}}
-        </td>
-        <td>
-          {{bhweb.insproot[column]}}
-        </td>
-      </tr>
+        {% if column == 'cache' %}
+          {% set percol = bhweb.insproot[column].split(',')[1] %}
+          {% set percent = percol.split('(')[1].split(')')[0].split('%')[0] %}
+          <tr>
+            <td>
+              {{column}}
+            </td>
+            <td>
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">
+                  {{percent}}%
+                </div>
+              </div>
+              {{bhweb.insproot[column]}}
+            </td>
+          </tr>
+        {% else %}
+          <tr>
+            <td>
+              {{column}}
+            </td>
+            <td>
+              {{bhweb.insproot[column]}}
+            </td>
+          </tr>
+        {% endif %}
       {% endfor %}
     </table>
     <h3>All connected nodes</h3>
