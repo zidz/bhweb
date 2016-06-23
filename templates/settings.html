@@ -10,15 +10,38 @@
           Value
         </th>
       </tr>
+      <form method="post">
       {% for option in bhweb.Config.options('server') %}
         <tr>
           <td>
             {{option}}
           </td>
           <td>
-            {{bhweb.Config.get('server',option)}}
+            <input name="{{option}}" type="text" class="form-control" id="{{option}}" value="{{bhweb.Config.get('server',option)}}">
           </td>
         </tr>
       {% endfor %}
+        <tr>
+          <td colspan="2" style="text-align:center">
+            <button type="submit" class="btn btn-primary">Submit changes</button>
+          </td>
+        </tr>
+        </form>
     </table>
   {% endblock %}
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputFile">File input</label>
+    <input type="file" id="exampleInputFile">
+    <p class="help-block">Example block-level help text here.</p>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox"> Check me out
+    </label>
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>

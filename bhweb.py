@@ -1,7 +1,7 @@
 #!/usr/bin/env python2.7
 
 import sys, argparse, json, os, urllib2, ConfigParser
-from flask import Flask, render_template, url_for, send_from_directory
+from flask import Flask, render_template, url_for, send_from_directory, request
 
 parser = argparse.ArgumentParser(description='This is a genuine frontend for bithorded deamon.')
 parser.add_argument('--bithorded-config', type=str, default='/etc/bithorde.conf', help='Read bithorded configuration file (default: /etc/bithorde.conf)')
@@ -18,7 +18,7 @@ class base():
   def __init__(self):
     self.test = 0
     self.Config = ConfigParser.ConfigParser()
-    self.version = '0.1'
+    self.version = '0.2rev1'
 
   def readconfig(self):
     self.Config.read(args.bithorded_config)
@@ -33,6 +33,14 @@ class base():
       else:
         value = 'N/A'
     return value
+
+  def writeconfig(self):
+    configfile = open(args.bithorded_config, 'wb')
+    try:
+      self.Config.write(configfile)
+    finally:
+      configfile.close()
+
 
   def readinspect(self):
     reqroot = urllib2.Request('http://localhost:'+self.getconfvalue('server','inspectport'), headers={"Accept" : "application/json"})
@@ -54,14 +62,19 @@ def status():
   bhweb.readinspect()
   return render_template('status.html', title=title, bhweb=bhweb)
 
-@web.route('/settings', methods=['GET'])
+@web.route('/settings', methods=['GET', 'POST'])
 def settings():
   title = 'Settings'
   bhweb = base()
   bhweb.readconfig()
+  if request.method == 'POST':
+    #print(request.form)
+    for option in request.form:
+      bhweb.Config.set('server',option,request.form[option])
+      bhweb.writeconfig()
   return render_template('settings.html', title=title, bhweb=bhweb)
 
-@web.route('/friends', methods=['GET'])
+@web.route('/friends', methods=['GET', 'POST'])
 def friends():
   title = 'Friends'
   bhweb = base()
