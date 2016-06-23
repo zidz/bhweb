@@ -10,17 +10,17 @@
           Address
         </th>
       </tr>
-      {% for section in bhweb.configdata %}
+      {% for section in bhweb.Config.sections() %}
         {% if 'friend' in section %}
-      <tr>
-          {% set friendname = section.split('.')[1] %}
-        <td>
-          {{ friendname }}
-        </td>
-        <td>
-          {{ bhweb.configdata[section]['addr'] }}
-        </td>
-      </tr>
+          {% set name = section.split('.')[1] %}
+          <tr>
+            <td>
+              {{name}}
+            </td>
+            <td>
+              {{bhweb.Config.get(section,'addr')}}
+            </td>
+          </tr>
         {% endif %}
       {% endfor %}
     </table>

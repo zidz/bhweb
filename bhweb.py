@@ -21,23 +21,23 @@ class base():
     self.version = '0.1'
 
   def readconfig(self):
+    self.Config.read(args.bithorded_config)
+
+  def getconfvalue(self,section,option):
+    self.readconfig()
     try:
-      self.Config.read(args.bithorded_config)
+      value = self.Config.get(section,option)
     except:
-      print('Config file '+args.bithorded_config+' does not exist or is not readable.')
-      sys.exit(1)
-    self.configsections = self.Config.sections()
-    self.configdata = {}
-    for section in self.configsections:
-      self.configdata[section] = {}      
-      for option in self.Config.options(section):
-        self.configdata[section][option] = self.Config.get(section, option)
+      if option == 'inspectport':
+        value = '5000'
+      else:
+        value = 'N/A'
+    return value
 
   def readinspect(self):
-    self.readconfig()
-    reqroot = urllib2.Request('http://localhost:'+self.configdata['server']['inspectport'], headers={"Accept" : "application/json"})
-    reqrouter = urllib2.Request('http://localhost:'+self.configdata['server']['inspectport']+'/router', headers={"Accept" : "application/json"})
-    reqconnections = urllib2.Request('http://localhost:'+self.configdata['server']['inspectport']+'/connections', headers={"Accept" : "application/json"})
+    reqroot = urllib2.Request('http://localhost:'+self.getconfvalue('server','inspectport'), headers={"Accept" : "application/json"})
+    reqrouter = urllib2.Request('http://localhost:'+self.getconfvalue('server','inspectport')+'/router', headers={"Accept" : "application/json"})
+    reqconnections = urllib2.Request('http://localhost:'+self.getconfvalue('server','inspectport')+'/connections', headers={"Accept" : "application/json"})
     try:
       self.insproot = json.load(urllib2.urlopen(reqroot))
       self.insprouter = json.load(urllib2.urlopen(reqrouter))

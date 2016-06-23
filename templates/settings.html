@@ -4,21 +4,21 @@
     <table class="table">
       <tr>
         <th style="width: 50%;">
-          Option 
+          Option
         </th>
         <th style="width: 50%;">
           Value
         </th>
       </tr>
-      {% for column in bhweb.configdata['server'] %}
-      <tr>
-        <td>
-          {{column}}
-        </td>
-        <td>
-          {{bhweb.configdata['server'][column]}}
-        </td>
-      </tr>
+      {% for option in bhweb.Config.options('server') %}
+        <tr>
+          <td>
+            {{option}}
+          </td>
+          <td>
+            {{bhweb.Config.get('server',option)}}
+          </td>
+        </tr>
       {% endfor %}
     </table>
   {% endblock %}
