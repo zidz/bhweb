@@ -15,10 +15,15 @@
           {% set name = section.split('.')[1] %}
           <tr>
             <td>
-              {{name}}
+              <a href="#" class="btn btn-default" role="button" title="Edit {{name}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a> {{name}}
             </td>
             <td>
               {{bhweb.Config.get(section,'addr')}}
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <a href="#" class="btn btn-default" role="button" title="Add friend"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a> Add Friend
             </td>
           </tr>
         {% endif %}
