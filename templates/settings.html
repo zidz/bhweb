@@ -1,5 +1,11 @@
 {% extends "base.html" %}
   {% block content %}
+    {% set infoname = "Write name of your node here without spaces. Default: Charlie" %}
+    {% set infotcpport = "The port where other bithorded nodes will reach this node. Default: 1337"%}
+    {% set infounixsocket = "Where bithorded unix socket should be created. Default: /tmp/bithorde" %}
+    {% set infounixperms = "The permissions that the unix socket file will get. Default: 0666" %}
+    {% set infoinspectport = "Management port of bithorded. Default: 5000" %}
+    {% set infoempty = "No clue available" %}
     <h3>Server configuration</h3>
     <table class="table">
       <tr>
@@ -12,9 +18,22 @@
       </tr>
       <form method="post">
       {% for option in bhweb.Config.options('server') %}
+        {% if option == 'name' %}
+          {% set info = infoname %}
+        {% elif option == 'tcpport' %}
+          {% set info = infotcpport %}
+        {% elif option == 'unixsocket' %}
+          {% set info = infounixsocket %}
+        {% elif option == 'unixperms' %}
+          {% set info = infounixperms %}
+        {% elif option == 'inspectport' %}
+          {% set info = infoinspectport %}
+        {% else %}
+          {% set info = infoempty %}
+        {% endif %}
         <tr>
           <td>
-            {{option}}
+            {{option}} <span title="{{info}}" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
           </td>
           <td>
             <input name="{{option}}" type="text" class="form-control" id="{{option}}" value="{{bhweb.Config.get('server',option)}}">
@@ -29,19 +48,3 @@
         </form>
     </table>
   {% endblock %}
-  <div class="form-group">
-    <label for="exampleInputPassword1">Password</label>
-    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-  </div>
-  <div class="form-group">
-    <label for="exampleInputFile">File input</label>
-    <input type="file" id="exampleInputFile">
-    <p class="help-block">Example block-level help text here.</p>
-  </div>
-  <div class="checkbox">
-    <label>
-      <input type="checkbox"> Check me out
-    </label>
-  </div>
-  <button type="submit" class="btn btn-default">Submit</button>
-</form>
