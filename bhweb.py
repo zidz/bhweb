@@ -1,7 +1,7 @@
 #!/usr/bin/env python2.7
 
 import sys, argparse, json, os, urllib2, ConfigParser
-from flask import Flask, render_template, url_for, send_from_directory, request
+from flask import Flask, render_template, url_for, send_from_directory, request, redirect
 
 parser = argparse.ArgumentParser(description='This is a genuine frontend for bithorded deamon.')
 parser.add_argument('--bithorded-config', type=str, default='/etc/bithorde.conf', help='Read bithorded configuration file (default: /etc/bithorde.conf)')
@@ -18,7 +18,7 @@ class base():
   def __init__(self):
     self.test = 0
     self.Config = ConfigParser.ConfigParser()
-    self.version = '0.2rev2'
+    self.version = '0.3rev1'
 
   def readconfig(self):
     self.Config.read(args.bithorded_config)
@@ -80,6 +80,38 @@ def friends():
   bhweb = base()
   bhweb.readconfig()
   return render_template('friends.html', title=title, bhweb=bhweb)
+
+@web.route('/friends/<path>', methods=['GET', 'POST'])
+def configfriend(path):
+  title = 'Friend configurator'
+  bhweb = base()
+  bhweb.readconfig()
+  if not bhweb.Config.has_section(path) and path != 'add':
+    return redirect(url_for('friends'))
+  if request.method == 'POST':
+    print(request.form)
+    if 'delete' in request.form:
+      print('WILL DELETE')
+      bhweb.Config.remove_section(path)
+      bhweb.writeconfig()
+      return redirect(url_for('friends'))
+    if path == 'add':
+      friendsection = 'friend.'+request.form['addr']
+      if bhweb.Config.has_section(friendsection):
+        return redirect(url_for('friends'))
+      else:
+        bhweb.Config.add_section(friendsection)
+    else:
+      friendsection = path
+    for option in request.form:
+      if request.form[option]:
+        bhweb.Config.set(friendsection,option,request.form[option])
+      else:
+        if bhweb.Config.has_option(friendsection,option):
+          bhweb.Config.remove_option(friendsection,option)
+    bhweb.writeconfig()
+    return redirect(url_for('friends'))
+  return render_template('configfriend.html', title=title, bhweb=bhweb, path=path)
 
 @web.route('/css/<path:path>')
 def send_css(path):

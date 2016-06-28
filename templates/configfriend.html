@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+  {% block content %}
+    {% if path == 'add' %}
+      <h3>Add friend</h3>
+    {% else %}  
+      {% set name = path.split('.')[1]%}
+      <h3>{{name}} config</h3>
+    {% endif %}  
+    <table class="table">
+      <tr>
+        <th style="width: 50%;">
+          Option
+        </th>
+        <th style="width: 50%;">
+          Value
+        </th>
+      </tr>
+      <form method="post">
+      <tr>
+        <td>
+          Friend name <span title="Name of the node you are connecting to ( Required )" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+        </td>
+        <td>
+          {% if path == 'add' %}
+            <input name="addr" type="text" class="form-control" id="addr" value="{{name}}">
+          {% else %}
+            <input type="text" class="form-control" id="addr" value="{{name}}" disabled=disabled>
+          {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Address <span title="The IP or FQDN to the other node. ( Not required )" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+        </td>
+        <td>
+          {% if bhweb.Config.has_option(path,'addr') %}
+            {% set defaddr = bhweb.Config.get(path,'addr') %}
+          {% else %}
+            {% set defaddr = '' %}
+          {% endif %}
+            <input name="addr" type="text" class="form-control" id="addr" value="{{defaddr}}">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Key <span title="The encryption key used by both parts ( Required if Cipher is set. )" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+        </td>
+        <td>
+          {% if bhweb.Config.has_option(path,'key') %}
+            {% set defkey = bhweb.Config.get(path,'key') %}
+          {% else %}
+            {% set defkey = '' %}
+          {% endif %}
+            <input name="key" type="text" class="form-control" id="key" value="{{defkey}}">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Cipher <span title="The cipher used for encryption. ( Not required )" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+        </td>
+        <td>
+          {% if bhweb.Config.has_option(path,'cipher') %}
+            {% set defcipher = bhweb.Config.get(path,'cipher') %}
+          {% else %}
+            {% set defcipher = '' %}
+          {% endif %}
+            <input name="cipher" type="text" class="form-control" id="cipher" value="{{defcipher}}">
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align:center">
+        {% if path == 'add' %}
+          <button type="submit" class="btn btn-primary">Submit changes</button>
+        {% else %}
+          <button type="submit" class="btn btn-danger" style="margin:2px" name="delete" value="delete">Remove Friend</button> <button type="submit" class="btn btn-primary" style="margin:2px">Submit changes</button>
+        {% endif %}
+        </td>
+      </tr>
+      </form>
+    </table>
+  {% endblock %}
