@@ -18,7 +18,7 @@ class base():
   def __init__(self):
     self.test = 0
     self.Config = ConfigParser.ConfigParser()
-    self.version = '0.3rev1'
+    self.version = '0.3rev2'
 
   def readconfig(self):
     self.Config.read(args.bithorded_config)
@@ -40,7 +40,6 @@ class base():
       self.Config.write(configfile)
     finally:
       configfile.close()
-
 
   def readinspect(self):
     reqroot = urllib2.Request('http://localhost:'+self.getconfvalue('server','inspectport'), headers={"Accept" : "application/json"})
