@@ -53,9 +53,9 @@
         {% set incon = bhweb.inspconnections[column].split(',')[0].split('+')[1].split('-')[1] %}
         {% set outcon = bhweb.inspconnections[column].split(',')[0].split('+')[1].split('-')[0] %}
         {% set datain = bhweb.inspconnections[column].split(',')[1].split(':')[1] %}
-          {% if 'mbit/s' in datain %}
+          {% if 'Mbit/s' in datain %}
             {% set datainusage = 'High' %}
-          {% elif 'kbit/s' in datain %}
+          {% elif 'Kbit/s' in datain %}
             {% set datainusage = 'Low' %}
           {% elif ' 0bit/s' == datain %}
             {% set datainusage = 'Radio silence' %}
@@ -63,9 +63,9 @@
             {% set datainusage = 'Gossiping' %}
           {% endif %}
         {% set dataout = bhweb.inspconnections[column].split(',')[2].split(':')[1] %}
-          {% if 'mbit/s' in dataout %}
+          {% if 'Mbit/s' in dataout %}
             {% set dataoutusage = 'High' %}
-          {% elif 'kbit/s' in dataout %}
+          {% elif 'Kbit/s' in dataout %}
             {% set dataoutusage = 'Low' %}
           {% elif ' 0bit/s' == dataout %}
             {% set dataoutusage = 'Radio silence' %}
