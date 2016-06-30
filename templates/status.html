@@ -54,7 +54,7 @@
         {% set outcon = bhweb.inspconnections[column].split(',')[0].split('+')[1].split('-')[0] %}
         {% set datain = bhweb.inspconnections[column].split(',')[1].split(':')[1] %}
           {% if 'Mbit/s' in datain %}
-            {% set datainusage = 'High' %}
+            {% set datainusage = Markup('<b>High</b>') %}
           {% elif 'Kbit/s' in datain %}
             {% set datainusage = 'Low' %}
           {% elif ' 0bit/s' == datain %}
@@ -64,7 +64,7 @@
           {% endif %}
         {% set dataout = bhweb.inspconnections[column].split(',')[2].split(':')[1] %}
           {% if 'Mbit/s' in dataout %}
-            {% set dataoutusage = 'High' %}
+            {% set dataoutusage = Markup('<b>High</b>') %}
           {% elif 'Kbit/s' in dataout %}
             {% set dataoutusage = 'Low' %}
           {% elif ' 0bit/s' == dataout %}

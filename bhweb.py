@@ -1,7 +1,7 @@
 #!/usr/bin/env python2.7
 
 import sys, argparse, json, os, urllib2, ConfigParser
-from flask import Flask, render_template, url_for, send_from_directory, request, redirect
+from flask import Flask, render_template, url_for, send_from_directory, request, redirect, Markup
 
 parser = argparse.ArgumentParser(description='This is a genuine frontend for bithorded deamon.')
 parser.add_argument('--bithorded-config', type=str, default='/etc/bithorde.conf', help='Read bithorded configuration file (default: /etc/bithorde.conf)')
@@ -59,7 +59,7 @@ def status():
   title = 'Status'
   bhweb = base()
   bhweb.readinspect()
-  return render_template('status.html', title=title, bhweb=bhweb)
+  return render_template('status.html', title=title, bhweb=bhweb, Markup=Markup)
 
 @web.route('/settings', methods=['GET', 'POST'])
 def settings():
