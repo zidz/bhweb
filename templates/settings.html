@@ -6,7 +6,9 @@
     {% set infounixperms = "The permissions that the unix socket file will get. Default: 0666" %}
     {% set infoinspectport = "Management port of bithorded. Default: 5000" %}
     {% set infoempty = "No clue available" %}
-    <h3>Server configuration</h3>
+    {% set dir = "Path where to store the cache of bithorde streams." %}
+    {% set size = "Cache limit in Mbytes." %}
+    <h3>Core server configuration</h3>
     <table class="table">
       <tr>
         <th style="width: 50%;">
@@ -47,4 +49,63 @@
         </tr>
         </form>
     </table>
+    <h3>Cache storage settings</h3>
+    <table class="table">
+      <tr>
+        <th style="width: 50%;">
+          Option
+        </th>
+        <th style="width: 50%;">
+          Value
+        </th>
+      </tr>
+      <form method="post">
+    {% if bhweb.Config.has_section('cache') %}
+      {% for option in bhweb.Config.options('cache') %}
+        {% if option == 'dir' %}
+          {% set info = dir %}
+        {% elif option == 'size' %}
+          {% set info = size %}
+        {% else %}
+          {% set info = infoempty %}
+        {% endif %}
+        <tr>
+          <td>
+            {{option}} <span title="{{info}}" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+          </td>
+          <td>
+            <input name="{{option}}" type="text" class="form-control" id="{{option}}" value="{{bhweb.Config.get('cache',option)}}">
+          </td>
+        </tr>
+      {% endfor %}
+        <tr>
+          <td colspan="2" style="text-align:center">
+            <button type="submit" class="btn btn-primary">Submit changes</button>
+          </td>
+        </tr>
+    {% else %}
+        <tr>
+          <td>
+            dir <span title="{{dir}}" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+          </td>
+          <td>
+            <input name="dir" type="text" class="form-control" id="dir" placeholder="Example: /var/cache/bithorde">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            size <span title="{{size}}" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+          </td>
+          <td>
+            <input name="size" type="text" class="form-control" id="dir" placeholder="Example: 50000">
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="text-align:center">
+            <button type="submit" class="btn btn-primary">Submit changes</button>
+          </td>
+        </tr>
+    </form>
+    </table>
+    {% endif %}
   {% endblock %}

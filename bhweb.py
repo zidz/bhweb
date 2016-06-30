@@ -67,10 +67,25 @@ def settings():
   bhweb = base()
   bhweb.readconfig()
   if request.method == 'POST':
-    #print(request.form)
-    for option in request.form:
-      bhweb.Config.set('server',option,request.form[option])
-      bhweb.writeconfig()
+    if 'name' in request.form:
+      for option in request.form:
+        bhweb.Config.set('server',option,request.form[option])
+        bhweb.writeconfig()
+    if 'size' in request.form:
+      if not bhweb.Config.has_section('cache'):
+        bhweb.Config.add_section('cache')
+      for option in request.form:
+        if not request.form[option]:
+          if bhweb.Config.has_section('cache'):
+            bhweb.Config.remove_section('cache')
+            bhweb.writeconfig()
+            break
+        bhweb.Config.set('cache',option,request.form[option])
+        bhweb.writeconfig()
+    if 'root' in request.form:
+      for option in request.form:
+        bhweb.Config.set('source.storage',option,request.form[option])
+        bhweb.writeconfig()
   return render_template('settings.html', title=title, bhweb=bhweb)
 
 @web.route('/friends', methods=['GET', 'POST'])
