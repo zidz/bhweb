@@ -18,7 +18,7 @@ class base():
   def __init__(self):
     self.test = 0
     self.Config = ConfigParser.ConfigParser()
-    self.version = '0.3rev2'
+    self.version = '0.3rev3'
 
   def readconfig(self):
     self.Config.read(args.bithorded_config)
